@@ -1,0 +1,95 @@
+import os
+
+doc_path = os.path.join(os.getcwd(), "~/Documents")
+
+try:
+    if not os.path.exists(doc_path):
+        os.makedirs(doc_path)
+except Exception as e:
+    print(f"ERROR: Could not set up record directory. Reason: {e}")
+    exit(1)
+
+def register_student():
+    print("=== Register New Student ===")
+    
+    while True:
+        student_no = input("Student No: ")
+        if student_no:
+            break
+        print("Student Number cannot be empty.")
+
+    last_name = input("Last Name: ")
+    first_name = input("First Name: ")
+    middle_initial = input("Middle Initial: ")
+    program = input("Program: ")
+    age = int(input("Age: "))
+    gender = input("Gender: ")
+    birthday = input("Birthday (MM/DD/YYYY): ")
+    contact_num = int(input("Contact No.: "))
+    
+    full_name = f"{last_name} {first_name} {middle_initial}."
+    data = [
+        f"Student No.: {student_no}",
+        f"Full Name: {full_name}",
+        f"Program: {program}",
+        f"Age: {age}",
+        f"Gender: {gender}",
+        f"Birthday: {birthday}",
+        f"Contact No.: {contact_num}"
+    ]
+    
+    file_name = f"{student_no}.txt"
+    file_path = os.path.join(doc_path, file_name)
+    
+    try:
+        with open(file_path, 'w') as f:
+            for line in data:
+                f.write(line + "\n")
+        print(f"\nSUCCESS: Student record saved to {file_name}!")
+    except Exception as e:
+        print(f"\nAn unexpected error occurred: {e}")
+
+def open_student_record():
+    print("\n=== Open Student Record ===")
+    
+    student_no = input("Enter Student No.: ")
+    if not student_no:
+        print("Student number cannot be empty.")
+        return
+
+    file_name = f"{student_no}.txt"
+    file_path = os.path.join(doc_path, file_name)
+    
+    try:
+        with open(file_path, 'r') as f:
+            print(f"\n-- Displaying Record for Student {student_no} ---")
+            
+            for line in f:
+                print(line)
+            
+            print("------------------------------")
+            
+    except FileNotFoundError:
+        print(f"X Student record not found.")
+
+def main_menu():
+    while True:
+        print(" ====== Student Records Menu ======")
+        print("1. Register Student")
+        print("2. Open Student Record")
+        print("3. Exit")
+        
+        choice = input("Enter your choice: ")
+        
+        if choice == '1':
+            register_student()
+        elif choice == '2':
+            open_student_record()
+        elif choice == '3':
+            print("Thank you for using the system. Goodbye!")
+            break
+        else:
+            print("Invalid choice. Please enter '1', '2', or '3'.")
+
+if __name__ == "__main__":
+    main_menu()
